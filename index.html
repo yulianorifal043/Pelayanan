@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pelayanan Real-Time</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="app-container">
+        <div id="visitor-view" class="view active">
+            <header class="app-header">
+                <h1>Layanan Pelanggan Digital</h1>
+                <p>Selamat datang! Silakan isi form di bawah untuk memulai.</p>
+            </header>
+
+            <div id="entry-form-section" class="card">
+                <h2>Ambil Nomor Antrean</h2>
+                <form id="entry-form">
+                    <div class="form-group">
+                        <label for="visitor-name">Nama Anda</label>
+                        <input type="text" id="visitor-name" placeholder="Contoh: Budi Santoso" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="service-type">Pilih Jenis Layanan</label>
+                        <select id="service-type" required>
+                            <option value="">-- Pilih Layanan --</option>
+                            <option value="Informasi Umum">Informasi Umum</option>
+                            <option value="Keluhan Teknis">Keluhan Teknis</option>
+                            <option value="Purna Jual">Layanan Purna Jual</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Masuk Antrean</button>
+                </form>
+            </div>
+
+            <div id="waiting-section" class="card hidden">
+                <h2>Anda Dalam Antrean</h2>
+                <div class="queue-status">
+                    <div class="queue-info-item">
+                        <span>Nomor Antrean Anda</span>
+                        <strong id="your-queue-number">A-05</strong>
+                    </div>
+                    <div class="queue-info-item">
+                        <span>Antrean di Depan</span>
+                        <strong id="queue-ahead">3 Orang</strong>
+                    </div>
+                    <div class="queue-info-item">
+                        <span>Estimasi Waktu</span>
+                        <strong id="estimated-time">6 Menit</strong>
+                    </div>
+                </div>
+                <div id="call-status" class="call-status-waiting">
+                    <div class="spinner"></div>
+                    <p>Mohon menunggu, petugas akan segera memanggil Anda...</p>
+                </div>
+            </div>
+            
+            <div id="chat-section" class="card hidden">
+                <div class="chat-header">
+                    <h3>Dilayani oleh: <strong>Admin Sarah</strong></h3>
+                </div>
+                <div class="chat-box">
+                    <div class="chat-message admin">Halo! Ada yang bisa saya bantu?</div>
+                    <div class="chat-message user">Halo, saya ingin bertanya tentang status pesanan saya.</div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" placeholder="Ketik pesan Anda...">
+                    <button class="btn">Kirim</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="admin-view" class="view hidden">
+            <header class="app-header">
+                <h1>Dasbor Admin</h1>
+                <p>Kelola antrean pelanggan secara real-time.</p>
+            </header>
+
+            <div class="admin-dashboard">
+                <div class="queue-list-card card">
+                    <h3>Daftar Antrean <span class="queue-count">(3)</span></h3>
+                    <ul id="admin-queue-list">
+                        <li class="queue-list-item">
+                            <span><strong>A-02</strong> - Budi Santoso</span>
+                            <small>Informasi Umum</small>
+                        </li>
+                        <li class="queue-list-item">
+                            <span><strong>A-03</strong> - Citra Lestari</span>
+                            <small>Keluhan Teknis</small>
+                        </li>
+                        <li class="queue-list-item">
+                            <span><strong>A-04</strong> - Eko Prasetyo</span>
+                            <small>Informasi Umum</small>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="current-service-card card">
+                    <h3>Sedang Dilayani</h3>
+                    <div id="admin-current-service">
+                        <p>Belum ada pelanggan yang dipanggil.</p>
+                    </div>
+                    <button id="call-next-btn" class="btn btn-primary">Panggil Berikutnya</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="view-switcher">
+        <button id="switch-to-admin">Lihat Tampilan Admin</button>
+        <button id="switch-to-visitor" class="hidden">Lihat Tampilan Pengunjung</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
