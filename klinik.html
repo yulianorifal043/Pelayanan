@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Antrean Klinik Kandungan - Proto</title>
+    <title>Klinik Sehat Bunda - Booking Online</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Custom styles untuk highlight aktif */
@@ -13,94 +13,228 @@
         .time-slot.active {
             @apply bg-blue-600 text-white;
         }
-        /* Style untuk hari yang tidak bisa diklik */
-        .calendar-day.disabled {
-            @apply opacity-50 cursor-not-allowed pointer-events-none bg-gray-50;
+        /* Style untuk hari dan slot yang tidak bisa diklik */
+        .calendar-day.disabled, .time-slot.disabled {
+            @apply opacity-50 cursor-not-allowed pointer-events-none bg-gray-50 text-gray-400;
+        }
+
+        /* Smooth scroll untuk navigasi */
+        html {
+            scroll-behavior: smooth;
         }
     </style>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen py-8 px-4">
-    <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">Booking Antrean Klinik Kandungan</h1>
+<body class="bg-gray-50 text-gray-900 font-sans leading-normal tracking-normal">
 
-        <div id="step-1" class="mb-8">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">1. Pilih Tanggal & Dokter</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kunjungan</label>
-                    <div id="calendar-container" class="border border-gray-300 rounded-md p-2">
-                        <div class="flex justify-between items-center mb-2">
-                            <button id="prevMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&lt;</button>
-                            <span id="currentMonthYear" class="font-semibold text-lg"></span>
-                            <button id="nextMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&gt;</button>
-                        </div>
-                        <div id="calendar-days-header" class="grid grid-cols-7 text-center text-xs font-semibold text-gray-500 mb-1">
-                            <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
-                        </div>
-                        <div id="calendar-days" class="grid grid-cols-7 gap-1 text-center">
+    <nav class="bg-blue-700 p-4 shadow-lg fixed w-full z-10 top-0">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#home" class="text-white text-2xl font-bold">Klinik Sehat Bunda</a>
+            <div class="space-x-4">
+                <a href="#about" class="text-blue-100 hover:text-white">Tentang Kami</a>
+                <a href="#doctors" class="text-blue-100 hover:text-white">Dokter Kami</a>
+                <a href="#services" class="text-blue-100 hover:text-white">Layanan</a>
+                <a href="#booking-section" class="bg-white text-blue-700 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300">Booking Sekarang</a>
+            </div>
+        </div>
+    </nav>
+
+    <header id="home" class="relative h-screen flex items-center justify-center text-center bg-cover bg-center" style="background-image: url('https://source.unsplash.com/1600x900/?pregnant,woman,clinic,doctor,health');">
+        <div class="absolute inset-0 bg-black opacity-60"></div>
+        <div class="relative z-10 text-white p-8 max-w-3xl">
+            <h1 class="text-5xl md:text-6xl font-extrabold mb-4 animate-fade-in-down">Selamat Datang di Klinik Sehat Bunda</h1>
+            <p class="text-xl md:text-2xl mb-8 animate-fade-in-up">Pendamping Terpercaya Kesehatan Ibu dan Anak</p>
+            <a href="#booking-section" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300">
+                Booking Janji Temu Sekarang
+            </a>
+        </div>
+    </header>
+
+    <section id="about" class="py-16 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-8">Tentang Klinik Kami</h2>
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8">
+                <div class="md:w-1/2">
+                    <img src="https://source.unsplash.com/600x400/?modern,clinic,hospital" alt="Klinik Modern" class="rounded-lg shadow-lg transform hover:scale-105 transition duration-300">
+                </div>
+                <div class="md:w-1/2 text-left">
+                    <p class="text-lg text-gray-700 mb-4">
+                        Klinik Sehat Bunda berkomitmen memberikan pelayanan kesehatan terbaik untuk ibu dan anak. Dengan fasilitas modern dan tim medis yang berpengalaman, kami siap mendampingi perjalanan kesehatan keluarga Anda.
+                    </p>
+                    <p class="text-lg text-gray-700">
+                        Kami mengutamakan kenyamanan, keamanan, dan privasi pasien, memastikan setiap kunjungan Anda berjalan lancar dan penuh perhatian.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="doctors" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-8">Dokter Spesialis Kandungan Kami</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <img src="https://source.unsplash.com/200x200/?doctor,woman,smiling" alt="dr. Ayu, Sp.OG" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">dr. Ayu Lestari, Sp.OG</h3>
+                    <p class="text-blue-600 font-semibold mb-2">Spesialis Obstetri & Ginekologi</p>
+                    <p class="text-gray-600 text-sm">Berpengalaman lebih dari 10 tahun dalam penanganan kehamilan berisiko tinggi dan masalah kesuburan.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <img src="https://source.unsplash.com/200x200/?doctor,man,portrait" alt="dr. Budi, Sp.OG" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">dr. Budi Santoso, Sp.OG</h3>
+                    <p class="text-blue-600 font-semibold mb-2">Spesialis Obstetri & Ginekologi</p>
+                    <p class="text-gray-600 text-sm">Fokus pada persalinan normal, program KB, dan konsultasi pra-nikah.</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                    <img src="https://source.unsplash.com/200x200/?female,doctor,asian" alt="dr. Cinta, Sp.OG" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
+                    <h3 class="text-xl font-bold text-gray-800 mb-2">dr. Cinta Ramadhani, Sp.OG</h3>
+                    <p class="text-blue-600 font-semibold mb-2">Spesialis Obstetri & Ginekologi</p>
+                    <p class="text-gray-600 text-sm">Ahli dalam ultrasonografi 4D dan deteksi dini kelainan janin.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-16 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-8">Layanan Unggulan Kami</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md flex items-start text-left">
+                    <svg class="w-8 h-8 text-blue-600 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Konsultasi Kehamilan</h3>
+                        <p class="text-gray-600 text-sm">Pemeriksaan rutin, USG, dan panduan lengkap selama masa kehamilan.</p>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md flex items-start text-left">
+                    <svg class="w-8 h-8 text-blue-600 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2zm7-7v4m0 0l-2-2m2 2l2-2"></path></svg>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Persalinan Normal & Caesar</h3>
+                        <p class="text-gray-600 text-sm">Dukungan penuh untuk persalinan yang aman dan nyaman.</p>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-6 rounded-lg shadow-md flex items-start text-left">
+                    <svg class="w-8 h-8 text-blue-600 mr-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Pemeriksaan Kesuburan</h3>
+                        <p class="text-gray-600 text-sm">Konsultasi dan program untuk pasangan yang merencanakan kehamilan.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="booking-section" class="py-16 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl mx-auto">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Mulai Booking Janji Temu Anda</h2>
+
+                <div id="step-1" class="mb-8">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">1. Pilih Tanggal & Dokter</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kunjungan</label>
+                            <div id="calendar-container" class="border border-gray-300 rounded-md p-2">
+                                <div class="flex justify-between items-center mb-2">
+                                    <button id="prevMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&lt;</button>
+                                    <span id="currentMonthYear" class="font-semibold text-lg"></span>
+                                    <button id="nextMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&gt;</button>
+                                </div>
+                                <div id="calendar-days-header" class="grid grid-cols-7 text-center text-xs font-semibold text-gray-500 mb-1">
+                                    <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                                </div>
+                                <div id="calendar-days" class="grid grid-cols-7 gap-1 text-center">
+                                    </div>
                             </div>
+                            <input type="hidden" id="selectedDate" name="selectedDate">
+                        </div>
+
+                        <div>
+                            <label for="doctor" class="block text-sm font-medium text-gray-700 mb-2">Pilih Dokter</label>
+                            <select id="doctor" name="doctor" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                                <option value="">Pilih Dokter</option>
+                                <option value="dr. Ayu Lestari, Sp.OG">dr. Ayu Lestari, Sp.OG</option>
+                                <option value="dr. Budi Santoso, Sp.OG">dr. Budi Santoso, Sp.OG</option>
+                                <option value="dr. Cinta Ramadhani, Sp.OG">dr. Cinta Ramadhani, Sp.OG</option>
+                            </select>
+                        </div>
                     </div>
-                    <input type="hidden" id="selectedDate" name="selectedDate">
+                    <button id="nextToStep2" class="mt-6 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Lanjut ke Waktu</button>
                 </div>
 
-                <div>
-                    <label for="doctor" class="block text-sm font-medium text-gray-700 mb-2">Pilih Dokter</label>
-                    <select id="doctor" name="doctor" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                        <option value="">Pilih Dokter</option>
-                        <option value="dr. Ayu, Sp.OG">dr. Ayu, Sp.OG</option>
-                        <option value="dr. Budi, Sp.OG">dr. Budi, Sp.OG</option>
-                    </select>
-                </div>
-            </div>
-            <button id="nextToStep2" class="mt-6 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Lanjut ke Waktu</button>
-        </div>
-
-        <div id="step-2" class="hidden">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">2. Pilih Waktu & Data Kontak</h2>
-            
-            <div class="mb-6">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan</label>
-                <div id="time-slots-container" class="grid grid-cols-3 md:grid-cols-4 gap-3">
+                <div id="step-2" class="hidden">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">2. Pilih Waktu & Data Kontak</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan</label>
+                        <div id="time-slots-container" class="grid grid-cols-3 md:grid-cols-4 gap-3">
+                            </div>
+                        <input type="hidden" id="selectedTime" name="selectedTime">
                     </div>
-                <input type="hidden" id="selectedTime" name="selectedTime">
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                <div>
-                    <label for="patientName" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                    <input type="text" id="patientName" name="patientName" required
-                           class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
-                </div>
-                <div>
-                    <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
-                    <input type="tel" id="phoneNumber" name="phoneNumber" required
-                           class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
-                </div>
-            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label for="patientName" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                            <input type="text" id="patientName" name="patientName" required
+                                   class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
+                        </div>
+                        <div>
+                            <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
+                            <input type="tel" id="phoneNumber" name="phoneNumber" required
+                                   class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
+                        </div>
+                    </div>
 
-            <div class="flex justify-between">
-                <button id="prevToStep1" class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Kembali</button>
-                <button id="confirmBooking" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Konfirmasi Booking</button>
+                    <div class="flex justify-between">
+                        <button id="prevToStep1" class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Kembali</button>
+                        <button id="confirmBooking" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Konfirmasi Booking</button>
+                    </div>
+                </div>
+
+                <div id="step-3" class="hidden text-center">
+                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Booking Berhasil!</h3>
+                    <p class="text-lg text-gray-600 mb-4">Terima kasih, <span id="displayPatientName" class="font-bold"></span>.</p>
+                    <p class="text-lg text-gray-600 mb-2">Janji temu Anda telah dikonfirmasi untuk:</p>
+                    <p class="text-xl font-bold text-blue-600 mb-2"><span id="displayDate"></span> pukul <span id="displayTime"></span> WIB</p>
+                    <p class="text-lg text-gray-600 mb-4">Dengan <span id="displayDoctor" class="font-bold"></span>.</p>
+                    <p class="text-2xl font-bold text-green-700 mb-6">Nomor Antrean Anda: <span id="displayQueueNumber" class="text-4xl"></span></p>
+                    <p class="text-sm text-gray-500 mb-4">Harap datang 15 menit sebelum jadwal. Anda akan melengkapi data pendaftaran saat tiba di klinik.</p>
+                    
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 text-left mb-6">
+                        <h4 class="font-semibold text-blue-800 mb-2">Penting: Lengkapi Data Diri Anda!</h4>
+                        <p class="text-sm text-blue-700">Untuk mempercepat pelayanan, Anda dapat mulai mengisi formulir pendaftaran lengkap di <a href="#" class="text-blue-600 hover:underline font-medium">tautan ini</a> atau scan QR Code di klinik. Ini akan memperlancar proses saat Anda tiba.</p>
+                        <p class="text-xs text-blue-600 mt-2">*(Fitur pengisian formulir lengkap akan diimplementasikan di tahap selanjutnya)*</p>
+                    </div>
+
+                    <button id="newBooking" class="mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Booking Baru</button>
+                </div>
+
             </div>
         </div>
+    </section>
 
-        <div id="step-3" class="hidden text-center">
-            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Booking Berhasil!</h2>
-            <p class="text-lg text-gray-600 mb-4">Terima kasih, <span id="displayPatientName" class="font-bold"></span>.</p>
-            <p class="text-lg text-gray-600 mb-2">Janji temu Anda telah dikonfirmasi untuk:</p>
-            <p class="text-xl font-bold text-blue-600 mb-2"><span id="displayDate"></span> pukul <span id="displayTime"></span> WIB</p>
-            <p class="text-lg text-gray-600 mb-4">Dengan <span id="displayDoctor" class="font-bold"></span>.</p>
-            <p class="text-2xl font-bold text-green-700 mb-6">Nomor Antrean Anda: <span id="displayQueueNumber" class="text-4xl"></span></p>
-            <p class="text-sm text-gray-500">Harap datang 15 menit sebelum jadwal. Anda akan melengkapi data pendaftaran saat tiba di klinik.</p>
-            <button id="newBooking" class="mt-8 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Booking Baru</button>
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 Klinik Sehat Bunda. Semua Hak Dilindungi.</p>
+            <p class="text-sm mt-2">Dibuat dengan ❤️ oleh Mahasiswa Teknik Informatika (Prototipe)</p>
         </div>
-
-    </div>
+    </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
             // DOM Elements
+            const homeSection = document.getElementById('home'); // Untuk navigasi balik
+            const bookingSection = document.getElementById('booking-section');
             const step1 = document.getElementById('step-1');
             const step2 = document.getElementById('step-2');
             const step3 = document.getElementById('step-3');
@@ -138,10 +272,11 @@
             let selectedDate = null;
             let selectedTime = null;
 
-            const availableTimeSlots = [ // Contoh slot waktu, bisa diambil dari backend nanti
-                "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
-                "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"
-            ];
+            // Define available time slots based on new rules
+            const availableTimeSlots = {
+                morning: ["06:00", "06:30", "07:00", "07:30", "08:00"],
+                afternoon: ["16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"]
+            };
 
             // --- Calendar Functions ---
             const renderCalendar = (month, year) => {
@@ -157,6 +292,15 @@
                     calendarContainer.appendChild(emptyDiv);
                 }
 
+                // Get today's date for comparison
+                const today = new Date();
+                today.setHours(0,0,0,0); // Reset time for accurate date comparison
+
+                // Get the limit date (today + 10 days)
+                const limitDate = new Date();
+                limitDate.setDate(today.getDate() + 10);
+                limitDate.setHours(0,0,0,0);
+
                 // Add days of the month
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dayDiv = document.createElement('div');
@@ -164,24 +308,16 @@
                     dayDiv.textContent = day;
                     dayDiv.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`; // YYYY-MM-DD
 
-                    // Highlight selected date if any
-                    if (selectedDate === dayDiv.dataset.date) {
+                    const currentDayDate = new Date(year, month, day);
+                    currentDayDate.setHours(0,0,0,0);
+
+                    // Disable past dates OR dates beyond 10 days from today
+                    if (currentDayDate < today || currentDayDate > limitDate) {
+                        dayDiv.classList.add('disabled');
+                    } else if (selectedDate === dayDiv.dataset.date) {
                         dayDiv.classList.add('active', 'bg-blue-600', 'text-white');
                     }
 
-                    // Disable past dates and current day if time has passed
-                    const today = new Date();
-                    const currentDayDate = new Date(year, month, day);
-                    currentDayDate.setHours(0,0,0,0); // Reset time for accurate date comparison
-
-                    // Disable if it's a past date
-                    if (currentDayDate < today.setHours(0,0,0,0)) { // Reset today's time for comparison
-                        dayDiv.classList.add('disabled');
-                    } else if (currentDayDate.getTime() === today.getTime()) { // If it's today
-                        // Optional: you could disable today if all slots are full,
-                        // but for this simple prototype, just allowing selection.
-                        // Real-world scenario would check time-slots availability.
-                    }
 
                     dayDiv.addEventListener('click', function() {
                         if (this.classList.contains('disabled')) return; // Prevent clicking disabled days
@@ -200,14 +336,32 @@
             };
 
             const changeMonth = (offset) => {
-                currentMonth += offset;
-                if (currentMonth < 0) {
-                    currentMonth = 11;
-                    currentYear--;
-                } else if (currentMonth > 11) {
-                    currentMonth = 0;
-                    currentYear++;
+                const newMonth = currentMonth + offset;
+                const newDate = new Date(currentYear, newMonth, 1);
+                
+                // Get today's date and the 10-day limit
+                const today = new Date();
+                today.setDate(today.getDate() -1); // go back one day so today is included in the 10 days
+                today.setHours(0,0,0,0);
+
+                const futureLimit = new Date();
+                futureLimit.setDate(futureLimit.getDate() + 10); // current date + 10 days
+                futureLimit.setHours(0,0,0,0);
+
+                // Check if the new month is within the allowable range (current month to 10 days from now)
+                if (newDate.getFullYear() < today.getFullYear() || 
+                   (newDate.getFullYear() === today.getFullYear() && newDate.getMonth() < today.getMonth())) {
+                    // Cannot go to past months before today
+                    return;
                 }
+                
+                // If the next month is beyond the 10-day limit, prevent changing
+                // This logic is a bit tricky for full month prev/next when limit is dynamic
+                // For simplicity in this proto, we allow month change and let day disable handle it.
+                // A more robust solution might need to check if ANY day in the new month is valid.
+
+                currentMonth = newDate.getMonth();
+                currentYear = newDate.getFullYear();
                 renderCalendar(currentMonth, currentYear);
             };
 
@@ -220,7 +374,15 @@
             // --- Time Slot Functions ---
             const renderTimeSlots = () => {
                 timeSlotsContainer.innerHTML = '';
-                availableTimeSlots.forEach(slot => {
+                const allSlots = [...availableTimeSlots.morning, ...availableTimeSlots.afternoon].sort(); // Gabungkan & urutkan
+
+                const now = new Date();
+                const selectedDateObj = new Date(selectedDate);
+                // Reset time for selectedDateObj to compare just date parts
+                selectedDateObj.setHours(0,0,0,0);
+                now.setHours(0,0,0,0); // Reset now's time for date comparison
+
+                allSlots.forEach(slot => {
                     const slotDiv = document.createElement('div');
                     slotDiv.classList.add('time-slot', 'p-3', 'border', 'border-gray-300', 'rounded-md', 'text-center', 'cursor-pointer', 'hover:bg-blue-100', 'transition', 'duration-150');
                     slotDiv.textContent = slot;
@@ -230,16 +392,14 @@
                         slotDiv.classList.add('active', 'bg-blue-600', 'text-white');
                     }
 
-                    // Optional: Disable past time slots if current date is today
-                    const today = new Date();
-                    const selectedDateObj = new Date(selectedDate);
-                    // Set both to same date part, then compare time
-                    if (selectedDateObj.toDateString() === today.toDateString()) {
-                        const [hour, minute] = slot.split(':').map(Number);
-                        const slotTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour, minute);
-                        if (slotTime < today) {
-                            slotDiv.classList.add('disabled');
-                        }
+                    // Disable past time slots if current date is today
+                    const [hour, minute] = slot.split(':').map(Number);
+                    const slotDateTime = new Date();
+                    slotDateTime.setFullYear(selectedDateObj.getFullYear(), selectedDateObj.getMonth(), selectedDateObj.getDate());
+                    slotDateTime.setHours(hour, minute, 0, 0);
+
+                    if (selectedDateObj.toDateString() === new Date().toDateString() && slotDateTime < new Date()) {
+                        slotDiv.classList.add('disabled');
                     }
 
                     slotDiv.addEventListener('click', function() {
@@ -265,11 +425,15 @@
                 step1.classList.add('hidden');
                 step2.classList.remove('hidden');
                 renderTimeSlots(); // Render time slots when moving to step 2
+                // Scroll to booking form
+                bookingSection.scrollIntoView({ behavior: 'smooth' });
             });
 
             prevToStep1Btn.addEventListener('click', () => {
                 step2.classList.add('hidden');
                 step1.classList.remove('hidden');
+                 // Scroll back to booking form
+                bookingSection.scrollIntoView({ behavior: 'smooth' });
             });
 
             confirmBookingBtn.addEventListener('click', () => {
@@ -283,10 +447,8 @@
                 }
 
                 // --- Simulasi Proses Booking & Nomor Antrean ---
-                // Di tahap prototipe ini, kita akan generate nomor antrean secara acak atau sederhana.
-                // Di backend (Laravel), ini akan lebih terstruktur.
                 const generateQueueNumber = () => {
-                    const prefix = 'K'; // Klinik Kandungan
+                    const prefix = 'KKB'; // Klinik Kandungan Booking
                     const randomNum = Math.floor(100 + Math.random() * 900); // 3 digit random
                     return `${prefix}${randomNum}`;
                 };
@@ -301,6 +463,8 @@
 
                 step2.classList.add('hidden');
                 step3.classList.remove('hidden');
+                 // Scroll to booking form
+                bookingSection.scrollIntoView({ behavior: 'smooth' });
             });
 
             newBookingBtn.addEventListener('click', () => {
@@ -328,6 +492,8 @@
 
                 step3.classList.add('hidden');
                 step1.classList.remove('hidden');
+                // Scroll back to top or booking section
+                homeSection.scrollIntoView({ behavior: 'smooth' });
             });
         });
     </script>
