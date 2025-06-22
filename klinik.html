@@ -17,24 +17,47 @@
         .calendar-day.disabled, .time-slot.disabled {
             @apply opacity-50 cursor-not-allowed pointer-events-none bg-gray-50 text-gray-400;
         }
+        /* Style untuk tanggal yang tidak bisa dipilih (kemarin & >10 hari) */
+        .calendar-day.out-of-range {
+            @apply bg-red-100 text-red-500 opacity-70 cursor-not-allowed pointer-events-none;
+        }
 
         /* Smooth scroll untuk navigasi */
         html {
             scroll-behavior: smooth;
         }
+
+        /* Overlay untuk modal */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 font-sans leading-normal tracking-normal">
 
-    <nav class="bg-blue-700 p-4 shadow-lg fixed w-full z-10 top-0">
+    <nav class="bg-blue-700 p-4 shadow-lg fixed w-full z-30 top-0">
         <div class="container mx-auto flex justify-between items-center">
             <a href="#home" class="text-white text-2xl font-bold">Klinik Sehat Bunda</a>
-            <div class="space-x-4">
+            
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-white focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+
+            <div class="hidden md:flex space-x-4">
                 <a href="#about" class="text-blue-100 hover:text-white">Tentang Kami</a>
                 <a href="#doctors" class="text-blue-100 hover:text-white">Dokter Kami</a>
                 <a href="#services" class="text-blue-100 hover:text-white">Layanan</a>
-                <a href="#booking-section" class="bg-white text-blue-700 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300">Booking Sekarang</a>
+                <a href="#" id="open-main-booking-btn" class="bg-white text-blue-700 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300">Booking Sekarang</a>
             </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden mt-4">
+            <a href="#about" class="block text-blue-100 hover:text-white py-2 px-4">Tentang Kami</a>
+            <a href="#doctors" class="block text-blue-100 hover:text-white py-2 px-4">Dokter Kami</a>
+            <a href="#services" class="block text-blue-100 hover:text-white py-2 px-4">Layanan</a>
+            <a href="#" id="open-main-booking-btn-mobile" class="block bg-white text-blue-700 px-4 py-2 rounded-full hover:bg-blue-100 transition duration-300 mt-2 mx-4 text-center">Booking Sekarang</a>
         </div>
     </nav>
 
@@ -43,7 +66,7 @@
         <div class="relative z-10 text-white p-8 max-w-3xl">
             <h1 class="text-5xl md:text-6xl font-extrabold mb-4 animate-fade-in-down">Selamat Datang di Klinik Sehat Bunda</h1>
             <p class="text-xl md:text-2xl mb-8 animate-fade-in-up">Pendamping Terpercaya Kesehatan Ibu dan Anak</p>
-            <a href="#booking-section" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300">
+            <a href="#" id="hero-booking-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transform hover:scale-105 transition duration-300">
                 Booking Janji Temu Sekarang
             </a>
         </div>
@@ -72,23 +95,38 @@
         <div class="container mx-auto px-6 text-center">
             <h2 class="text-4xl font-bold text-gray-800 mb-8">Dokter Spesialis Kandungan Kami</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300 doctor-card" data-doctor-id="dr-ayu"
+                    data-name="dr. Ayu Lestari, Sp.OG"
+                    data-specialty="Spesialis Obstetri & Ginekologi"
+                    data-desc="Berpengalaman lebih dari 10 tahun dalam penanganan kehamilan berisiko tinggi dan masalah kesuburan."
+                    data-img="https://source.unsplash.com/200x200/?doctor,woman,smiling">
                     <img src="https://source.unsplash.com/200x200/?doctor,woman,smiling" alt="dr. Ayu, Sp.OG" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800 mb-2">dr. Ayu Lestari, Sp.OG</h3>
                     <p class="text-blue-600 font-semibold mb-2">Spesialis Obstetri & Ginekologi</p>
-                    <p class="text-gray-600 text-sm">Berpengalaman lebih dari 10 tahun dalam penanganan kehamilan berisiko tinggi dan masalah kesuburan.</p>
+                    <p class="text-gray-600 text-sm">Berpengalaman lebih dari 10 tahun...</p>
+                    <button class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md open-doctor-detail">Lihat Detail</button>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300 doctor-card" data-doctor-id="dr-budi"
+                    data-name="dr. Budi Santoso, Sp.OG"
+                    data-specialty="Spesialis Obstetri & Ginekologi"
+                    data-desc="Fokus pada persalinan normal, program KB, dan konsultasi pra-nikah."
+                    data-img="https://source.unsplash.com/200x200/?doctor,man,portrait">
                     <img src="https://source.unsplash.com/200x200/?doctor,man,portrait" alt="dr. Budi, Sp.OG" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800 mb-2">dr. Budi Santoso, Sp.OG</h3>
                     <p class="text-blue-600 font-semibold mb-2">Spesialis Obstetri & Ginekologi</p>
-                    <p class="text-gray-600 text-sm">Fokus pada persalinan normal, program KB, dan konsultasi pra-nikah.</p>
+                    <p class="text-gray-600 text-sm">Fokus pada persalinan normal...</p>
+                    <button class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md open-doctor-detail">Lihat Detail</button>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300">
+                <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-2 transition duration-300 doctor-card" data-doctor-id="dr-cinta"
+                    data-name="dr. Cinta Ramadhani, Sp.OG"
+                    data-specialty="Spesialis Obstetri & Ginekologi"
+                    data-desc="Ahli dalam ultrasonografi 4D dan deteksi dini kelainan janin."
+                    data-img="https://source.unsplash.com/200x200/?female,doctor,asian">
                     <img src="https://source.unsplash.com/200x200/?female,doctor,asian" alt="dr. Cinta, Sp.OG" class="w-32 h-32 rounded-full mx-auto mb-4 object-cover">
                     <h3 class="text-xl font-bold text-gray-800 mb-2">dr. Cinta Ramadhani, Sp.OG</h3>
                     <p class="text-blue-600 font-semibold mb-2">Spesialis Obstetri & Ginekologi</p>
-                    <p class="text-gray-600 text-sm">Ahli dalam ultrasonografi 4D dan deteksi dini kelainan janin.</p>
+                    <p class="text-gray-600 text-sm">Ahli dalam ultrasonografi 4D...</p>
+                    <button class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md open-doctor-detail">Lihat Detail</button>
                 </div>
             </div>
         </div>
@@ -123,96 +161,6 @@
         </div>
     </section>
 
-    <section id="booking-section" class="py-16 bg-gray-100">
-        <div class="container mx-auto px-6">
-            <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl mx-auto">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Mulai Booking Janji Temu Anda</h2>
-
-                <div id="step-1" class="mb-8">
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">1. Pilih Tanggal & Dokter</h3>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kunjungan</label>
-                            <div id="calendar-container" class="border border-gray-300 rounded-md p-2">
-                                <div class="flex justify-between items-center mb-2">
-                                    <button id="prevMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&lt;</button>
-                                    <span id="currentMonthYear" class="font-semibold text-lg"></span>
-                                    <button id="nextMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&gt;</button>
-                                </div>
-                                <div id="calendar-days-header" class="grid grid-cols-7 text-center text-xs font-semibold text-gray-500 mb-1">
-                                    <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
-                                </div>
-                                <div id="calendar-days" class="grid grid-cols-7 gap-1 text-center">
-                                    </div>
-                            </div>
-                            <input type="hidden" id="selectedDate" name="selectedDate">
-                        </div>
-
-                        <div>
-                            <label for="doctor" class="block text-sm font-medium text-gray-700 mb-2">Pilih Dokter</label>
-                            <select id="doctor" name="doctor" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                                <option value="">Pilih Dokter</option>
-                                <option value="dr. Ayu Lestari, Sp.OG">dr. Ayu Lestari, Sp.OG</option>
-                                <option value="dr. Budi Santoso, Sp.OG">dr. Budi Santoso, Sp.OG</option>
-                                <option value="dr. Cinta Ramadhani, Sp.OG">dr. Cinta Ramadhani, Sp.OG</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button id="nextToStep2" class="mt-6 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Lanjut ke Waktu</button>
-                </div>
-
-                <div id="step-2" class="hidden">
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">2. Pilih Waktu & Data Kontak</h3>
-                    
-                    <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan</label>
-                        <div id="time-slots-container" class="grid grid-cols-3 md:grid-cols-4 gap-3">
-                            </div>
-                        <input type="hidden" id="selectedTime" name="selectedTime">
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <label for="patientName" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
-                            <input type="text" id="patientName" name="patientName" required
-                                   class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
-                        </div>
-                        <div>
-                            <label for="phoneNumber" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
-                            <input type="tel" id="phoneNumber" name="phoneNumber" required
-                                   class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
-                        </div>
-                    </div>
-
-                    <div class="flex justify-between">
-                        <button id="prevToStep1" class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Kembali</button>
-                        <button id="confirmBooking" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Konfirmasi Booking</button>
-                    </div>
-                </div>
-
-                <div id="step-3" class="hidden text-center">
-                    <h3 class="text-2xl font-semibold text-gray-700 mb-4">Booking Berhasil!</h3>
-                    <p class="text-lg text-gray-600 mb-4">Terima kasih, <span id="displayPatientName" class="font-bold"></span>.</p>
-                    <p class="text-lg text-gray-600 mb-2">Janji temu Anda telah dikonfirmasi untuk:</p>
-                    <p class="text-xl font-bold text-blue-600 mb-2"><span id="displayDate"></span> pukul <span id="displayTime"></span> WIB</p>
-                    <p class="text-lg text-gray-600 mb-4">Dengan <span id="displayDoctor" class="font-bold"></span>.</p>
-                    <p class="text-2xl font-bold text-green-700 mb-6">Nomor Antrean Anda: <span id="displayQueueNumber" class="text-4xl"></span></p>
-                    <p class="text-sm text-gray-500 mb-4">Harap datang 15 menit sebelum jadwal. Anda akan melengkapi data pendaftaran saat tiba di klinik.</p>
-                    
-                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 text-left mb-6">
-                        <h4 class="font-semibold text-blue-800 mb-2">Penting: Lengkapi Data Diri Anda!</h4>
-                        <p class="text-sm text-blue-700">Untuk mempercepat pelayanan, Anda dapat mulai mengisi formulir pendaftaran lengkap di <a href="#" class="text-blue-600 hover:underline font-medium">tautan ini</a> atau scan QR Code di klinik. Ini akan memperlancar proses saat Anda tiba.</p>
-                        <p class="text-xs text-blue-600 mt-2">*(Fitur pengisian formulir lengkap akan diimplementasikan di tahap selanjutnya)*</p>
-                    </div>
-
-                    <button id="newBooking" class="mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Booking Baru</button>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
     <footer class="bg-gray-800 text-white py-8">
         <div class="container mx-auto px-6 text-center">
             <p>&copy; 2025 Klinik Sehat Bunda. Semua Hak Dilindungi.</p>
@@ -220,167 +168,334 @@
         </div>
     </footer>
 
+    <div id="booking-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl mx-auto relative transform transition-all duration-300 scale-95 opacity-0" id="booking-modal-content">
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold" id="close-booking-modal">&times;</button>
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Booking Antrean Janji Temu</h2>
+
+            <div id="modal-step-1" class="mb-8">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">1. Pilih Tanggal & Dokter</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Kunjungan</label>
+                        <div id="modal-calendar-container" class="border border-gray-300 rounded-md p-2">
+                            <div class="flex justify-between items-center mb-2">
+                                <button id="modal-prevMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&lt;</button>
+                                <span id="modal-currentMonthYear" class="font-semibold text-lg"></span>
+                                <button id="modal-nextMonth" class="px-3 py-1 rounded-md bg-gray-200 hover:bg-gray-300">&gt;</button>
+                            </div>
+                            <div id="modal-calendar-days-header" class="grid grid-cols-7 text-center text-xs font-semibold text-gray-500 mb-1">
+                                <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span><span>Kam</span><span>Jum</span><span>Sab</span>
+                            </div>
+                            <div id="modal-calendar-days" class="grid grid-cols-7 gap-1 text-center">
+                                </div>
+                        </div>
+                        <input type="hidden" id="modal-selectedDate" name="modalSelectedDate">
+                    </div>
+
+                    <div>
+                        <label for="modal-doctor" class="block text-sm font-medium text-gray-700 mb-2">Pilih Dokter</label>
+                        <select id="modal-doctor" name="modalDoctor" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
+                            <option value="">Pilih Dokter</option>
+                            <option value="dr. Ayu Lestari, Sp.OG">dr. Ayu Lestari, Sp.OG</option>
+                            <option value="dr. Budi Santoso, Sp.OG">dr. Budi Santoso, Sp.OG</option>
+                            <option value="dr. Cinta Ramadhani, Sp.OG">dr. Cinta Ramadhani, Sp.OG</option>
+                        </select>
+                    </div>
+                </div>
+                <button id="modal-nextToStep2" class="mt-6 w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Lanjut ke Waktu</button>
+            </div>
+
+            <div id="modal-step-2" class="hidden">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">2. Pilih Waktu & Data Kontak</h3>
+                
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Waktu Kunjungan</label>
+                    <div id="modal-time-slots-container" class="grid grid-cols-3 md:grid-cols-4 gap-3">
+                        </div>
+                    <input type="hidden" id="modal-selectedTime" name="modalSelectedTime">
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>
+                        <label for="modal-patientName" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" id="modal-patientName" name="modalPatientName" required
+                               class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
+                    </div>
+                    <div>
+                        <label for="modal-phoneNumber" class="block text-sm font-medium text-gray-700">Nomor Telepon</label>
+                        <input type="tel" id="modal-phoneNumber" name="modalPhoneNumber" required
+                               class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md p-2">
+                    </div>
+                </div>
+
+                <div class="flex justify-between">
+                    <button id="modal-prevToStep1" class="py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Kembali</button>
+                    <button id="modal-confirmBooking" class="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">Konfirmasi Booking</button>
+                </div>
+            </div>
+
+            <div id="modal-step-3" class="hidden text-center">
+                <h3 class="text-2xl font-semibold text-gray-700 mb-4">Booking Berhasil!</h3>
+                <p class="text-lg text-gray-600 mb-4">Terima kasih, <span id="modal-displayPatientName" class="font-bold"></span>.</p>
+                <p class="text-lg text-gray-600 mb-2">Janji temu Anda telah dikonfirmasi untuk:</p>
+                <p class="text-xl font-bold text-blue-600 mb-2"><span id="modal-displayDate"></span> pukul <span id="modal-displayTime"></span> WIB</p>
+                <p class="text-lg text-gray-600 mb-4">Dengan <span id="modal-displayDoctor" class="font-bold"></span>.</p>
+                <p class="text-2xl font-bold text-green-700 mb-6">Nomor Antrean Anda: <span id="modal-displayQueueNumber" class="text-4xl"></span></p>
+                <p class="text-sm text-gray-500 mb-4">Harap datang 15 menit sebelum jadwal. Anda akan melengkapi data pendaftaran saat tiba di klinik.</p>
+                
+                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200 text-left mb-6">
+                    <h4 class="font-semibold text-blue-800 mb-2">Penting: Lengkapi Data Diri Anda!</h4>
+                    <p class="text-sm text-blue-700">Untuk mempercepat pelayanan, Anda dapat mulai mengisi formulir pendaftaran lengkap di <a href="#" class="text-blue-600 hover:underline font-medium">tautan ini</a> atau scan QR Code di klinik. Ini akan memperlancar proses saat Anda tiba.</p>
+                    <p class="text-xs text-blue-600 mt-2">*(Fitur pengisian formulir lengkap akan diimplementasikan di tahap selanjutnya)*</p>
+                </div>
+
+                <button id="modal-newBooking" class="mt-4 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Booking Baru</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="doctor-detail-modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg mx-auto relative transform transition-all duration-300 scale-95 opacity-0" id="doctor-detail-modal-content">
+            <button class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-3xl font-bold" id="close-doctor-detail-modal">&times;</button>
+            <div class="flex flex-col items-center text-center">
+                <img id="doctor-modal-img" src="" alt="Doctor Image" class="w-40 h-40 rounded-full mx-auto mb-4 object-cover">
+                <h3 id="doctor-modal-name" class="text-2xl font-bold text-gray-800 mb-2"></h3>
+                <p id="doctor-modal-specialty" class="text-blue-600 font-semibold mb-2"></p>
+                <p id="doctor-modal-desc" class="text-gray-600 text-md mb-6"></p>
+                <button id="doctor-modal-booking-btn" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md font-semibold">Booking Antrean dengan Dokter Ini</button>
+            </div>
+        </div>
+    </div>
+
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Smooth scroll for internal links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
+                    // Only scroll if not triggering a modal
+                    if (!this.id.includes('booking-btn')) { 
+                        e.preventDefault();
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
                 });
             });
 
-            // DOM Elements
-            const homeSection = document.getElementById('home'); // Untuk navigasi balik
-            const bookingSection = document.getElementById('booking-section');
-            const step1 = document.getElementById('step-1');
-            const step2 = document.getElementById('step-2');
-            const step3 = document.getElementById('step-3');
-            const nextToStep2Btn = document.getElementById('nextToStep2');
-            const prevToStep1Btn = document.getElementById('prevToStep1');
-            const confirmBookingBtn = document.getElementById('confirmBooking');
-            const newBookingBtn = document.getElementById('newBooking');
+            // --- Mobile Menu Toggle ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            // Close mobile menu when a link is clicked
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                });
+            });
 
-            // Calendar Elements
-            const calendarContainer = document.getElementById('calendar-days');
-            const currentMonthYearSpan = document.getElementById('currentMonthYear');
-            const prevMonthBtn = document.getElementById('prevMonth');
-            const nextMonthBtn = document.getElementById('nextMonth');
-            const selectedDateInput = document.getElementById('selectedDate');
 
-            // Time Slot Elements
-            const timeSlotsContainer = document.getElementById('time-slots-container');
-            const selectedTimeInput = document.getElementById('selectedTime');
+            // --- Booking Modal Elements (for main booking modal) ---
+            const bookingModal = document.getElementById('booking-modal');
+            const bookingModalContent = document.getElementById('booking-modal-content');
+            const closeBookingModalBtn = document.getElementById('close-booking-modal');
+            const openMainBookingBtns = document.querySelectorAll('#hero-booking-btn, #open-main-booking-btn, #open-main-booking-btn-mobile'); // All buttons that open main booking modal
 
-            // Input Fields
-            const patientNameInput = document.getElementById('patientName');
-            const phoneNumberInput = document.getElementById('phoneNumber');
-            const doctorSelect = document.getElementById('doctor');
+            const modalStep1 = document.getElementById('modal-step-1');
+            const modalStep2 = document.getElementById('modal-step-2');
+            const modalStep3 = document.getElementById('modal-step-3');
+            const modalNextToStep2Btn = document.getElementById('modal-nextToStep2');
+            const modalPrevToStep1Btn = document.getElementById('modal-prevToStep1');
+            const modalConfirmBookingBtn = document.getElementById('modal-confirmBooking');
+            const modalNewBookingBtn = document.getElementById('modal-newBooking');
 
-            // Display Elements (Step 3)
-            const displayPatientName = document.getElementById('displayPatientName');
-            const displayDate = document.getElementById('displayDate');
-            const displayTime = document.getElementById('displayTime');
-            const displayDoctor = document.getElementById('displayDoctor');
-            const displayQueueNumber = document.getElementById('displayQueueNumber');
+            // Calendar Elements (inside modal)
+            const modalCalendarContainer = document.getElementById('modal-calendar-days');
+            const modalCurrentMonthYearSpan = document.getElementById('modal-currentMonthYear');
+            const modalPrevMonthBtn = document.getElementById('modal-prevMonth');
+            const modalNextMonthBtn = document.getElementById('modal-nextMonth');
+            const modalSelectedDateInput = document.getElementById('modal-selectedDate');
 
-            // State Variables
+            // Time Slot Elements (inside modal)
+            const modalTimeSlotsContainer = document.getElementById('modal-time-slots-container');
+            const modalSelectedTimeInput = document.getElementById('modal-selectedTime');
+
+            // Input Fields (inside modal)
+            const modalPatientNameInput = document.getElementById('modal-patientName');
+            const modalPhoneNumberInput = document.getElementById('modal-phoneNumber');
+            const modalDoctorSelect = document.getElementById('modal-doctor');
+
+            // Display Elements (Step 3 inside modal)
+            const modalDisplayPatientName = document.getElementById('modal-displayPatientName');
+            const modalDisplayDate = document.getElementById('modal-displayDate');
+            const modalDisplayTime = document.getElementById('modal-displayTime');
+            const modalDisplayDoctor = document.getElementById('modal-displayDoctor');
+            const modalDisplayQueueNumber = document.getElementById('modal-displayQueueNumber');
+
+            // --- Doctor Detail Modal Elements ---
+            const doctorDetailModal = document.getElementById('doctor-detail-modal');
+            const doctorDetailModalContent = document.getElementById('doctor-detail-modal-content');
+            const closeDoctorDetailModalBtn = document.getElementById('close-doctor-detail-modal');
+            const openDoctorDetailBtns = document.querySelectorAll('.open-doctor-detail');
+            const doctorModalImg = document.getElementById('doctor-modal-img');
+            const doctorModalName = document.getElementById('doctor-modal-name');
+            const doctorModalSpecialty = document.getElementById('doctor-modal-specialty');
+            const doctorModalDesc = document.getElementById('doctor-modal-desc');
+            const doctorModalBookingBtn = document.getElementById('doctor-modal-booking-btn');
+
+            // State Variables (shared for all modals)
             let currentMonth = new Date().getMonth();
             let currentYear = new Date().getFullYear();
             let selectedDate = null;
             let selectedTime = null;
+            let selectedDoctorName = null; // To store doctor chosen from detail modal
 
-            // Define available time slots based on new rules
             const availableTimeSlots = {
                 morning: ["06:00", "06:30", "07:00", "07:30", "08:00"],
                 afternoon: ["16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"]
             };
 
-            // --- Calendar Functions ---
-            const renderCalendar = (month, year) => {
-                calendarContainer.innerHTML = ''; // Clear previous days
-                currentMonthYearSpan.textContent = new Date(year, month).toLocaleString('id-ID', { month: 'long', year: 'numeric' });
+            // --- Helper Functions for Modals ---
+            const openModal = (modalElement, contentElement) => {
+                modalElement.classList.remove('hidden');
+                setTimeout(() => {
+                    contentElement.classList.remove('scale-95', 'opacity-0');
+                    contentElement.classList.add('scale-100', 'opacity-100');
+                }, 50); // Small delay for animation
+            };
 
-                const firstDayOfMonth = new Date(year, month, 1).getDay(); // 0 = Sunday, 1 = Monday, ...
-                const daysInMonth = new Date(year, month + 1, 0).getDate(); // Last day of month
+            const closeLastOpenModal = () => {
+                // Determine which modal is open and close it
+                if (!bookingModal.classList.contains('hidden')) {
+                    closeBookingModal();
+                } else if (!doctorDetailModal.classList.contains('hidden')) {
+                    closeDoctorDetailModal();
+                }
+            };
 
-                // Add empty cells for preceding days
+            const closeBookingModal = () => {
+                bookingModalContent.classList.add('scale-95', 'opacity-0');
+                bookingModalContent.classList.remove('scale-100', 'opacity-100');
+                setTimeout(() => {
+                    bookingModal.classList.add('hidden');
+                    resetBookingModal(); // Reset modal state when closed
+                }, 300); // Match transition duration
+            };
+
+            const closeDoctorDetailModal = () => {
+                doctorDetailModalContent.classList.add('scale-95', 'opacity-0');
+                doctorDetailModalContent.classList.remove('scale-100', 'opacity-100');
+                setTimeout(() => {
+                    doctorDetailModal.classList.add('hidden');
+                }, 300); // Match transition duration
+            };
+
+            // Close modals when clicking outside or pressing ESC
+            bookingModal.addEventListener('click', (e) => {
+                if (e.target === bookingModal) closeBookingModal();
+            });
+            doctorDetailModal.addEventListener('click', (e) => {
+                if (e.target === doctorDetailModal) closeDoctorDetailModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeLastOpenModal();
+            });
+
+
+            // --- Booking Calendar & Time Slot Logic (Adapted for Modal) ---
+            const renderModalCalendar = (month, year) => {
+                modalCalendarContainer.innerHTML = '';
+                modalCurrentMonthYearSpan.textContent = new Date(year, month).toLocaleString('id-ID', { month: 'long', year: 'numeric' });
+
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                const daysInMonth = new Date(year, month + 1, 0).getDate();
+
                 for (let i = 0; i < firstDayOfMonth; i++) {
                     const emptyDiv = document.createElement('div');
-                    calendarContainer.appendChild(emptyDiv);
+                    modalCalendarContainer.appendChild(emptyDiv);
                 }
 
-                // Get today's date for comparison
                 const today = new Date();
-                today.setHours(0,0,0,0); // Reset time for accurate date comparison
+                today.setHours(0,0,0,0); 
 
-                // Get the limit date (today + 10 days)
                 const limitDate = new Date();
                 limitDate.setDate(today.getDate() + 10);
                 limitDate.setHours(0,0,0,0);
 
-                // Add days of the month
                 for (let day = 1; day <= daysInMonth; day++) {
                     const dayDiv = document.createElement('div');
                     dayDiv.classList.add('calendar-day', 'p-2', 'cursor-pointer', 'rounded-md', 'hover:bg-blue-100', 'transition', 'duration-150');
                     dayDiv.textContent = day;
-                    dayDiv.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`; // YYYY-MM-DD
+                    dayDiv.dataset.date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
                     const currentDayDate = new Date(year, month, day);
                     currentDayDate.setHours(0,0,0,0);
 
-                    // Disable past dates OR dates beyond 10 days from today
+                    // Disable past dates AND dates beyond 10 days from today
                     if (currentDayDate < today || currentDayDate > limitDate) {
-                        dayDiv.classList.add('disabled');
+                        dayDiv.classList.add('out-of-range'); // New class for visual cue
                     } else if (selectedDate === dayDiv.dataset.date) {
                         dayDiv.classList.add('active', 'bg-blue-600', 'text-white');
                     }
 
-
                     dayDiv.addEventListener('click', function() {
-                        if (this.classList.contains('disabled')) return; // Prevent clicking disabled days
+                        if (this.classList.contains('out-of-range')) {
+                            alert('Mohon maaf, Anda hanya dapat melakukan booking untuk hari ini hingga 10 hari ke depan.');
+                            return;
+                        }
 
-                        // Remove active class from previously selected day
-                        document.querySelectorAll('.calendar-day').forEach(d => {
+                        document.querySelectorAll('#modal-calendar-days .calendar-day').forEach(d => {
                             d.classList.remove('active', 'bg-blue-600', 'text-white');
                         });
-                        // Add active class to current selected day
                         this.classList.add('active', 'bg-blue-600', 'text-white');
                         selectedDate = this.dataset.date;
-                        selectedDateInput.value = selectedDate; // Update hidden input
+                        modalSelectedDateInput.value = selectedDate;
                     });
-                    calendarContainer.appendChild(dayDiv);
+                    modalCalendarContainer.appendChild(dayDiv);
                 }
             };
 
-            const changeMonth = (offset) => {
+            const changeModalMonth = (offset) => {
                 const newMonth = currentMonth + offset;
                 const newDate = new Date(currentYear, newMonth, 1);
                 
-                // Get today's date and the 10-day limit
                 const today = new Date();
-                today.setDate(today.getDate() -1); // go back one day so today is included in the 10 days
-                today.setHours(0,0,0,0);
+                today.setHours(0,0,0,0); 
 
                 const futureLimit = new Date();
-                futureLimit.setDate(futureLimit.getDate() + 10); // current date + 10 days
+                futureLimit.setDate(today.getDate() + 10); 
                 futureLimit.setHours(0,0,0,0);
 
-                // Check if the new month is within the allowable range (current month to 10 days from now)
-                if (newDate.getFullYear() < today.getFullYear() || 
-                   (newDate.getFullYear() === today.getFullYear() && newDate.getMonth() < today.getMonth())) {
-                    // Cannot go to past months before today
+                // Prevent navigating to months completely outside the range (e.g., last year, or too far in future)
+                // This is a simplified check. A more robust one might check if ANY day in the month is valid.
+                const firstDayOfNewMonth = new Date(newDate.getFullYear(), newDate.getMonth(), 1);
+                const lastDayOfNewMonth = new Date(newDate.getFullYear(), newDate.getMonth() + 1, 0);
+
+                if (lastDayOfNewMonth < today || firstDayOfNewMonth > futureLimit) {
+                    alert('Tidak dapat melihat bulan di luar rentang booking (hari ini hingga 10 hari ke depan).');
                     return;
                 }
-                
-                // If the next month is beyond the 10-day limit, prevent changing
-                // This logic is a bit tricky for full month prev/next when limit is dynamic
-                // For simplicity in this proto, we allow month change and let day disable handle it.
-                // A more robust solution might need to check if ANY day in the new month is valid.
 
                 currentMonth = newDate.getMonth();
                 currentYear = newDate.getFullYear();
-                renderCalendar(currentMonth, currentYear);
+                renderModalCalendar(currentMonth, currentYear);
             };
 
-            prevMonthBtn.addEventListener('click', () => changeMonth(-1));
-            nextMonthBtn.addEventListener('click', () => changeMonth(1));
+            modalPrevMonthBtn.addEventListener('click', () => changeModalMonth(-1));
+            modalNextMonthBtn.addEventListener('click', () => changeModalMonth(1));
 
-            // Initial render
-            renderCalendar(currentMonth, currentYear);
-
-            // --- Time Slot Functions ---
-            const renderTimeSlots = () => {
-                timeSlotsContainer.innerHTML = '';
-                const allSlots = [...availableTimeSlots.morning, ...availableTimeSlots.afternoon].sort(); // Gabungkan & urutkan
+            const renderModalTimeSlots = () => {
+                modalTimeSlotsContainer.innerHTML = '';
+                const allSlots = [...availableTimeSlots.morning, ...availableTimeSlots.afternoon].sort();
 
                 const now = new Date();
                 const selectedDateObj = new Date(selectedDate);
-                // Reset time for selectedDateObj to compare just date parts
-                selectedDateObj.setHours(0,0,0,0);
-                now.setHours(0,0,0,0); // Reset now's time for date comparison
+                selectedDateObj.setHours(0,0,0,0); 
+                now.setHours(0,0,0,0); 
 
                 allSlots.forEach(slot => {
                     const slotDiv = document.createElement('div');
@@ -392,7 +507,6 @@
                         slotDiv.classList.add('active', 'bg-blue-600', 'text-white');
                     }
 
-                    // Disable past time slots if current date is today
                     const [hour, minute] = slot.split(':').map(Number);
                     const slotDateTime = new Date();
                     slotDateTime.setFullYear(selectedDateObj.getFullYear(), selectedDateObj.getMonth(), selectedDateObj.getDate());
@@ -405,41 +519,46 @@
                     slotDiv.addEventListener('click', function() {
                         if (this.classList.contains('disabled')) return;
 
-                        document.querySelectorAll('.time-slot').forEach(s => {
+                        document.querySelectorAll('#modal-time-slots-container .time-slot').forEach(s => {
                             s.classList.remove('active', 'bg-blue-600', 'text-white');
                         });
                         this.classList.add('active', 'bg-blue-600', 'text-white');
                         selectedTime = slot;
-                        selectedTimeInput.value = selectedTime;
+                        modalSelectedTimeInput.value = selectedTime;
                     });
-                    timeSlotsContainer.appendChild(slotDiv);
+                    modalTimeSlotsContainer.appendChild(slotDiv);
                 });
             };
 
-            // --- Navigation & Booking Logic ---
-            nextToStep2Btn.addEventListener('click', () => {
-                if (!selectedDate || doctorSelect.value === "") {
+            // --- Booking Modal Flow Control ---
+            openMainBookingBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    resetBookingModal(); // Ensure fresh state
+                    openModal(bookingModal, bookingModalContent);
+                });
+            });
+            closeBookingModalBtn.addEventListener('click', closeBookingModal);
+
+            modalNextToStep2Btn.addEventListener('click', () => {
+                if (!selectedDate || modalDoctorSelect.value === "") {
                     alert('Mohon lengkapi Tanggal Kunjungan dan Dokter terlebih dahulu.');
                     return;
                 }
-                step1.classList.add('hidden');
-                step2.classList.remove('hidden');
-                renderTimeSlots(); // Render time slots when moving to step 2
-                // Scroll to booking form
-                bookingSection.scrollIntoView({ behavior: 'smooth' });
+                modalStep1.classList.add('hidden');
+                modalStep2.classList.remove('hidden');
+                renderModalTimeSlots();
             });
 
-            prevToStep1Btn.addEventListener('click', () => {
-                step2.classList.add('hidden');
-                step1.classList.remove('hidden');
-                 // Scroll back to booking form
-                bookingSection.scrollIntoView({ behavior: 'smooth' });
+            modalPrevToStep1Btn.addEventListener('click', () => {
+                modalStep2.classList.add('hidden');
+                modalStep1.classList.remove('hidden');
             });
 
-            confirmBookingBtn.addEventListener('click', () => {
-                const patientName = patientNameInput.value.trim();
-                const phoneNumber = phoneNumberInput.value.trim();
-                const doctorName = doctorSelect.value;
+            modalConfirmBookingBtn.addEventListener('click', () => {
+                const patientName = modalPatientNameInput.value.trim();
+                const phoneNumber = modalPhoneNumberInput.value.trim();
+                const doctorName = modalDoctorSelect.value;
 
                 if (!selectedTime || !patientName || !phoneNumber) {
                     alert('Mohon lengkapi semua data: Waktu, Nama, dan Nomor Telepon.');
@@ -448,53 +567,89 @@
 
                 // --- Simulasi Proses Booking & Nomor Antrean ---
                 const generateQueueNumber = () => {
-                    const prefix = 'KKB'; // Klinik Kandungan Booking
-                    const randomNum = Math.floor(100 + Math.random() * 900); // 3 digit random
+                    const prefix = 'KKB';
+                    const randomNum = Math.floor(100 + Math.random() * 900);
                     return `${prefix}${randomNum}`;
                 };
                 const queueNumber = generateQueueNumber();
 
-                // Tampilkan data di Step 3
-                displayPatientName.textContent = patientName;
-                displayDate.textContent = new Date(selectedDate).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-                displayTime.textContent = selectedTime;
-                displayDoctor.textContent = doctorName;
-                displayQueueNumber.textContent = queueNumber;
+                // Display data in Step 3
+                modalDisplayPatientName.textContent = patientName;
+                modalDisplayDate.textContent = new Date(selectedDate).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+                modalDisplayTime.textContent = selectedTime;
+                modalDisplayDoctor.textContent = doctorName;
+                modalDisplayQueueNumber.textContent = queueNumber;
 
-                step2.classList.add('hidden');
-                step3.classList.remove('hidden');
-                 // Scroll to booking form
-                bookingSection.scrollIntoView({ behavior: 'smooth' });
+                modalStep2.classList.add('hidden');
+                modalStep3.classList.remove('hidden');
             });
 
-            newBookingBtn.addEventListener('click', () => {
-                // Reset semua state dan kembali ke Step 1
+            modalNewBookingBtn.addEventListener('click', () => {
+                closeBookingModal(); // Close current modal
+                // After closing, the modal will be reset via resetBookingModal call in closeBookingModal
+                // And then can be reopened clean if needed
+            });
+
+            const resetBookingModal = () => {
                 selectedDate = null;
                 selectedTime = null;
-                selectedDateInput.value = '';
-                selectedTimeInput.value = '';
-                patientNameInput.value = '';
-                phoneNumberInput.value = '';
-                doctorSelect.value = '';
+                modalSelectedDateInput.value = '';
+                modalSelectedTimeInput.value = '';
+                modalPatientNameInput.value = '';
+                modalPhoneNumberInput.value = '';
+                modalDoctorSelect.value = '';
                 
-                // Remove active classes from previously selected items
-                document.querySelectorAll('.calendar-day.active').forEach(d => {
+                document.querySelectorAll('#modal-calendar-days .calendar-day.active').forEach(d => {
                     d.classList.remove('active', 'bg-blue-600', 'text-white');
                 });
-                document.querySelectorAll('.time-slot.active').forEach(s => {
+                document.querySelectorAll('#modal-time-slots-container .time-slot.active').forEach(s => {
                     s.classList.remove('active', 'bg-blue-600', 'text-white');
                 });
 
-                // Reset calendar to current month/year
                 currentMonth = new Date().getMonth();
                 currentYear = new Date().getFullYear();
-                renderCalendar(currentMonth, currentYear); 
+                renderModalCalendar(currentMonth, currentYear); 
 
-                step3.classList.add('hidden');
-                step1.classList.remove('hidden');
-                // Scroll back to top or booking section
-                homeSection.scrollIntoView({ behavior: 'smooth' });
+                modalStep3.classList.add('hidden');
+                modalStep1.classList.remove('hidden');
+            };
+
+            // --- Doctor Detail Modal Logic ---
+            openDoctorDetailBtns.forEach(button => {
+                button.addEventListener('click', () => {
+                    const doctorCard = button.closest('.doctor-card');
+                    const doctorName = doctorCard.dataset.name;
+                    const doctorSpecialty = doctorCard.dataset.specialty;
+                    const doctorDesc = doctorCard.dataset.desc;
+                    const doctorImg = doctorCard.dataset.img;
+
+                    doctorModalImg.src = doctorImg;
+                    doctorModalName.textContent = doctorName;
+                    doctorModalSpecialty.textContent = doctorSpecialty;
+                    doctorModalDesc.textContent = doctorDesc;
+                    
+                    selectedDoctorName = doctorName; // Store selected doctor for booking
+
+                    openModal(doctorDetailModal, doctorDetailModalContent);
+                });
             });
+
+            closeDoctorDetailModalBtn.addEventListener('click', closeDoctorDetailModal);
+
+            doctorModalBookingBtn.addEventListener('click', () => {
+                closeDoctorDetailModal(); // Close doctor detail modal first
+                resetBookingModal(); // Reset booking modal state
+                
+                // Pre-select doctor in the booking modal if chosen from detail
+                if (selectedDoctorName) {
+                    modalDoctorSelect.value = selectedDoctorName;
+                }
+
+                openModal(bookingModal, bookingModalContent); // Open main booking modal
+            });
+
+            // Initial render of main modal calendar (for first open)
+            renderModalCalendar(currentMonth, currentYear);
         });
     </script>
 </body>
